@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Anarchy Nametag Maker</title>
+
+<link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
+
+<style>
+    body {
+        background: #2d2d2d;
+        margin: 0;
+        padding: 20px;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 800px;
+        width: 100%;
+        background: #3b3b3b;
+        border: 4px solid #4a4a4a;
+        border-radius: 8px;
+        padding: 25px;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.3), 0 5px 0 #2a2a2a;
+    }
+
+    h1 {
+        color: #ffffff;
+        font-size: 32px;
+        font-weight: bold;
+        text-align: center;
+        margin: 0 0 5px 0;
+        text-shadow: 3px 3px 0 #1a1a1a;
+        letter-spacing: 1px;
+        word-break: break-word;
+    }
+
+    .subtitle {
+        color: #cccccc;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 25px;
+        border-bottom: 2px solid #4a4a4a;
+        padding-bottom: 15px;
+    }
+
+    .input-area {
+        background: #4f4f4f;
+        border: 3px solid #5e5e5e;
+        border-radius: 6px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .label {
+        color: #ddd;
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 8px;
+        display: block;
+        text-shadow: 2px 2px 0 #2a2a2a;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 18px;
+        background: #2d2d2d;
+        border: 3px solid #6b6b6b;
+        border-radius: 6px;
+        color: white;
+        font-family: 'Minecraftia', monospace;
+        box-sizing: border-box;
+        box-shadow: inset 0 2px 5px #1a1a1a;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #8b8b8b;
+        background: #353535;
+    }
+
+    .mode-selector {
+        background: #4f4f4f;
+        border: 3px solid #5e5e5e;
+        border-radius: 6px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .mode-title {
+        color: #ddd;
+        font-size: 15px;
+        font-weight: bold;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+    }
+
+    .radio-group {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .radio-option {
+        flex: 1;
+        min-width: 100px;
+    }
+
+    .radio-option input[type="radio"] {
+        display: none;
+    }
+
+    .radio-option label {
+        display: block;
+        padding: 12px 5px;
+        background: #3a3a3a;
+        border: 3px solid #5a5a5a;
+        border-radius: 6px;
+        color: #ccc;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.1s ease;
+        text-shadow: 2px 2px 0 #1a1a1a;
+        box-shadow: 0 3px 0 #2a2a2a;
+    }
+
+    .radio-option input[type="radio"]:checked + label {
+        border-color: #aaa;
+        transform: translateY(1px);
+        box-shadow: 0 1px 0 #2a2a2a;
+    }
+
+    .radio-option.friend input[type="radio"]:checked + label {
+        background: #2a4a6a;
+        color: #aaffff;
+        border-color: #5c9bd5;
+    }
+
+    .radio-option.enemy input[type="radio"]:checked + label {
+        background: #6a2a2a;
+        color: #ffaaaa;
+        border-color: #d55c5c;
+    }
+
+    .radio-option.normal input[type="radio"]:checked + label {
+        background: #4a4a4a;
+        color: white;
+        border-color: #b0b0b0;
+    }
+
+    .button-area {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 15px 10px;
+        font-size: 18px;
+        font-weight: bold;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.1s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: 3px solid #5e5e5e;
+        box-shadow: 0 4px 0 #2a2a2a;
+    }
+
+    .btn:active {
+        transform: translateY(3px);
+        box-shadow: 0 1px 0 #2a2a2a;
+    }
+
+    .btn-generate {
+        background: #5b8c5b;
+        color: white;
+        border-color: #6ba06b;
+    }
+
+    .btn-generate:hover {
+        background: #6ba06b;
+    }
+
+    .btn-download {
+        background: #5b7c8c;
+        color: white;
+        border-color: #6b8c9c;
+    }
+
+    .btn-download:hover {
+        background: #6b8c9c;
+    }
+
+    .preview-box {
+        background: #2d2d2d;
+        border: 5px solid #4a4a4a;
+        border-radius: 8px;
+        padding: 25px;
+        box-shadow: inset 0 0 15px #1a1a1a;
+    }
+
+    .preview-header {
+        color: #aaa;
+        font-size: 14px;
+        margin-bottom: 15px;
+        text-align: center;
+        text-transform: uppercase;
+        border-bottom: 2px solid #4a4a4a;
+        padding-bottom: 8px;
+    }
+
+    canvas {
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+        height: auto;
+        background: #262626;
+        border: 3px solid #5e5e5e;
+        border-radius: 4px;
+        image-rendering: crisp-edges;
+        image-rendering: pixelated;
+    }
+
+    .footer {
+        margin-top: 15px;
+        color: #888;
+        font-size: 12px;
+        text-align: center;
+        border-top: 2px solid #4a4a4a;
+        padding-top: 15px;
+    }
+</style>
+</head>
+
+<body>
+<div class="container">
+    <h1>MC ANARCHY NAMETAG MAKER</h1>
+
+    <div class="input-area">
+        <div class="label">PLAYER NAME</div>
+        <input type="text" id="nameInput" placeholder="enter name..." value="Player">
+    </div>
+
+    <div class="mode-selector">
+        <div class="mode-title">► SELECT MODE</div>
+        <div class="radio-group">
+            <div class="radio-option normal">
+                <input type="radio" name="team" id="normal" value="normal" checked>
+                <label for="normal">⚪ NORMAL</label>
+            </div>
+            <div class="radio-option friend">
+                <input type="radio" name="team" id="friend" value="friend">
+                <label for="friend">🔵 FRIEND</label>
+            </div>
+            <div class="radio-option enemy">
+                <input type="radio" name="team" id="enemy" value="enemy">
+                <label for="enemy">🔴 ENEMY</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="button-area">
+        <button class="btn btn-generate" onclick="generate()">▶ GENERATE</button>
+        <button class="btn btn-download" onclick="downloadPNG()">💾 DOWNLOAD PNG</button>
+    </div>
+
+    <div class="preview-box">
+        <div class="preview-header">▼ PREVIEW ▼</div>
+        <canvas id="canvas" width="700" height="220"></canvas>
+    </div>
+<div class="footer">
+    by <a href="https://discord.gg/mTcmh5rPpM" target="_blank" style="color:#888; text-decoration: underline;">
+        ItsMahir
+    </a>
+</div>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+ctx.imageSmoothingEnabled = false;
+
+const icons={
+    totem:"https://assets.mcasset.cloud/1.12.2/assets/minecraft/textures/items/totem.png",
+    crystal:"https://assets.mcasset.cloud/1.12.2/assets/minecraft/textures/items/end_crystal.png",
+    helmet:"https://assets.mcasset.cloud/1.21.11/assets/minecraft/textures/item/netherite_helmet.png",
+    chest:"https://assets.mcasset.cloud/1.21.11/assets/minecraft/textures/item/netherite_chestplate.png",
+    legs:"https://assets.mcasset.cloud/1.21.11/assets/minecraft/textures/item/netherite_leggings.png",
+    boots:"https://assets.mcasset.cloud/1.21.11/assets/minecraft/textures/item/netherite_boots.png"
+};
+
+const loaded={};
+
+function loadImages(callback){
+    let count=0;
+    const keys=Object.keys(icons);
+
+    if (keys.length === 0) {
+        callback();
+        return;
+    }
+
+    keys.forEach(k=>{
+        const img=new Image();
+        img.crossOrigin="anonymous";
+        img.src=icons[k];
+
+        img.onload=()=>{
+            loaded[k]=img;
+            count++;
+            if(count===keys.length) callback();
+        };
+        
+        img.onerror = () => {
+            console.warn(k + " failed to load");
+            count++;
+            if(count===keys.length) callback();
+        };
+    });
+}
+
+function getTeamColor() {
+    if (document.getElementById('friend').checked) {
+        return '#44c0eb';
+    } else if (document.getElementById('enemy').checked) {
+        return '#b40000';
+    } else {
+        return '#ffffff';
+    }
+}
+
+function generate(){
+    setTimeout(() => {
+        loadImages(() => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const name = document.getElementById("nameInput").value || "Player";
+            const teamColor = getTeamColor();
+
+            ctx.font = "32px 'Minecraftia', monospace";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            const centerX = canvas.width / 2;
+            const baseY = 140;
+            const armorY = baseY - 70;
+
+            const armorSize = 34;
+            const gap = 4;
+            const armorTotalWidth = armorSize * 4 + gap * 3;
+            const armorStartX = centerX - armorTotalWidth / 2;
+
+            if (loaded.helmet) ctx.drawImage(loaded.helmet, armorStartX, armorY, armorSize, armorSize);
+            if (loaded.chest) ctx.drawImage(loaded.chest, armorStartX + armorSize + gap, armorY, armorSize, armorSize);
+            if (loaded.legs) ctx.drawImage(loaded.legs, armorStartX + (armorSize + gap) * 2, armorY, armorSize, armorSize);
+            if (loaded.boots) ctx.drawImage(loaded.boots, armorStartX + (armorSize + gap) * 3, armorY, armorSize, armorSize);
+
+            if (loaded.totem) ctx.drawImage(loaded.totem, armorStartX - 45, armorY, 36, 36);
+            if (loaded.crystal) ctx.drawImage(loaded.crystal, armorStartX + armorTotalWidth + 10, armorY, 36, 36);
+
+            ctx.fillStyle = "black";
+            ctx.fillText(name, centerX + 2, baseY + 2);
+
+            ctx.fillStyle = teamColor;
+            ctx.fillText(name, centerX, baseY);
+        });
+    }, 200);
+}
+
+function downloadPNG(){
+    const link=document.createElement("a");
+    link.download="nametag.png";
+    link.href=canvas.toDataURL("image/png");
+    link.click();
+}
+</script>
+</body>
+</html>

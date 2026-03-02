@@ -254,7 +254,7 @@
 
     <div class="mode-selector">
         <div class="mode-title">► SELECT MODE</div>
-        <div class="radio-group">
+        <div class="radio-group" style="margin-bottom: 20px;">
             <div class="radio-option normal">
                 <input type="radio" name="team" id="normal" value="normal" checked>
                 <label for="normal">⚪ NORMAL</label>
@@ -266,6 +266,30 @@
             <div class="radio-option enemy">
                 <input type="radio" name="team" id="enemy" value="enemy">
                 <label for="enemy">🔴 ENEMY</label>
+            </div>
+        </div>
+
+        <div class="mode-title">► TEXTURE STYLE</div>
+        <div class="radio-group" style="margin-bottom: 20px;">
+            <div class="radio-option normal">
+                <input type="radio" name="textureStyle" id="oldStyle" value="old" checked>
+                <label for="oldStyle">Programmer Art</label>
+            </div>
+            <div class="radio-option normal">
+                <input type="radio" name="textureStyle" id="newStyle" value="new">
+                <label for="newStyle">Jappa</label>
+            </div>
+        </div>
+
+        <div class="mode-title">► ARMOR TYPE</div>
+        <div class="radio-group">
+            <div class="radio-option normal">
+                <input type="radio" name="armorSet" id="netheriteSet" value="netherite" checked>
+                <label for="netheriteSet">Netherite</label>
+            </div>
+            <div class="radio-option normal">
+                <input type="radio" name="armorSet" id="diamondSet" value="diamond">
+                <label for="diamondSet">Diamond</label>
             </div>
         </div>
     </div>
@@ -291,25 +315,40 @@ const ctx = canvas.getContext("2d");
 
 ctx.imageSmoothingEnabled = false;
 
-const icons={
-    totem:"https://assets.mcasset.cloud/1.12.2/assets/minecraft/textures/items/totem.png",
-    crystal:"https://assets.mcasset.cloud/1.12.2/assets/minecraft/textures/items/end_crystal.png",
-    helmet:"https://assets.mcasset.cloud/1.21.11/assets/minecraft/textures/item/netherite_helmet.png",
-    chest:"https://assets.mcasset.cloud/1.21.11/assets/minecraft/textures/item/netherite_chestplate.png",
-    legs:"https://assets.mcasset.cloud/1.21.11/assets/minecraft/textures/item/netherite_leggings.png",
-    boots:"https://assets.mcasset.cloud/1.21.11/assets/minecraft/textures/item/netherite_boots.png"
-};
+const OLD_ROOT = "https://assets.mcasset.cloud/1.12.2/assets/minecraft/textures/items/";
+const NEW_ROOT = "https://assets.mcasset.cloud/1.21.1/assets/minecraft/textures/item/";
 
 const loaded={};
 
+function getSettings() {
+    return {
+        style: document.querySelector('input[name="textureStyle"]:checked').value,
+        armor: document.querySelector('input[name="armorSet"]:checked').value
+    };
+}
+
 function loadImages(callback){
+    const s = getSettings();
+
+    const isOld = s.style === 'old';
+    const itemRoot = isOld ? OLD_ROOT : NEW_ROOT;
+    const totemFile = isOld ? 'totem.png' : 'totem_of_undying.png';
+
+    const armorRoot = (s.armor === 'netherite') ? NEW_ROOT : itemRoot;
+
+    const icons = {
+        totem: `${itemRoot}${totemFile}`,
+        crystal: `${itemRoot}end_crystal.png`,
+        helmet: `${armorRoot}${s.armor}_helmet.png`,
+        chest: `${armorRoot}${s.armor}_chestplate.png`,
+        legs: `${armorRoot}${s.armor}_leggings.png`,
+        boots: `${armorRoot}${s.armor}_boots.png`
+    };
+
     let count=0;
     const keys=Object.keys(icons);
 
-    if (keys.length === 0) {
-        callback();
-        return;
-    }
+    keys.forEach(k => delete loaded[k]);
 
     keys.forEach(k=>{
         const img=new Image();
@@ -323,7 +362,7 @@ function loadImages(callback){
         };
         
         img.onerror = () => {
-            console.warn(k + " failed to load");
+            console.warn(k + " failed to load from: " + icons[k]);
             count++;
             if(count===keys.length) callback();
         };
